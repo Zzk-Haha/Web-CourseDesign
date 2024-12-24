@@ -1,6 +1,7 @@
 <script setup>
 import Sidenav from './components/Sidenav.vue'
 import { useRoute } from 'vue-router';
+
 const route = useRoute();
 </script>
 
@@ -21,8 +22,7 @@ const route = useRoute();
 
 .main-content {
   flex-grow: 1; /* 使主内容区占据剩余的空间 */
-  padding: 20px; /* 为内容区域增加内边距 */
   background-color: #f7f7f7; /* 可自定义背景颜色 */
-  overflow-y: auto; /* 如果内容超出，启用滚动条 */
+  overflow-y: auto; /* 禁用滚动条 */
 }
 </style>

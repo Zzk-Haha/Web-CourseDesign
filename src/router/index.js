@@ -1,7 +1,7 @@
 //引入依赖及组件
 import { createRouter, createWebHistory } from 'vue-router';
 
-import LabReseration from '../components/LabReseration.vue'
+import LabReseration from '../components/LabReservation.vue'
 import Login from '../components/Login.vue'
 
 const routes = [
