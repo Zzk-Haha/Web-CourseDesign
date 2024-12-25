@@ -53,6 +53,10 @@ const handleLogin = async (event) => {
       // 打印日志，确认 token 是否已正确保存
       console.log("token:", response.headers['token']);
       console.log("role:", response.headers['role']);
+      console.log(userData.value)
+
+      // 将用户信息保存到localStorage
+      localStorage.setItem('userData', JSON.stringify(userData.value));
 
 
       // 登录成功，跳转到教师首页
@@ -96,8 +100,10 @@ const handleAdminLogin = async (event) => {
       localStorage.setItem('token',  response.headers['token']); // 保存 token
       localStorage.setItem('role',  response.headers['role']); // 保存 role
 
+      // console.log(userData.value)
+
       // 跳转到管理员首页
-      router.push('/manageindex');
+      router.push('/adminmanage');
     } else {
       // 登录失败，显示错误信息
       message.value = response.data.message || '登录失败';

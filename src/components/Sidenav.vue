@@ -19,44 +19,44 @@
           <el-icon><location /></el-icon>
           <span>教师个人管理</span>
         </template>
-        <el-menu-item index="1-1">
-          <router-link to="/infomanage">
+        <router-link to="/infomanage">
+          <el-menu-item index="1-1">
             <span>个人信息管理</span>
-          </router-link>
-        </el-menu-item>
-        <el-menu-item index="1-2">
-          <router-link to="/coursemanage">
+          </el-menu-item>
+        </router-link>
+        <router-link to="/coursemanage">
+          <el-menu-item index="1-2">
             <span>课程管理</span>
-          </router-link>
-        </el-menu-item>
+          </el-menu-item>
+        </router-link>
       </el-sub-menu>
 
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <template #title>
-          <router-link to="/index">
+      <router-link to="/index">
+        <el-menu-item index="2">
+          <el-icon><icon-menu /></el-icon>
+          <template #title>
             <span>实验室预约</span>
-          </router-link>
-        </template>
-      </el-menu-item>
+          </template>
+        </el-menu-item>
+      </router-link>
 
-      <el-menu-item index="3">
-        <el-icon><document /></el-icon>
-        <template #title>
-          <router-link to="/coursereservation">
+      <router-link to="/coursereservation">
+        <el-menu-item index="3">
+          <el-icon><document /></el-icon>
+          <template #title>
             <span>课程预约</span>
-          </router-link>
-        </template>
-      </el-menu-item>
+          </template>
+        </el-menu-item>
+      </router-link>
 
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>
-          <router-link to="/currentreservation">
+      <router-link to="/currentreservation">
+        <el-menu-item index="4">
+          <el-icon><setting /></el-icon>
+          <template #title>
             <span>当前预约</span>
-          </router-link>
-        </template>
-      </el-menu-item>
+          </template>
+        </el-menu-item>
+      </router-link>
     </el-menu>
   </div>
 </template>
@@ -130,6 +130,14 @@ const handleClose = (key: string, keyPath: string[]) => {
 .el-menu-item .el-icon:hover {
   color: #409eff;
 }
+/* 去掉下划线 */
+a{
+  text-decoration: none;
+}
+.router-link-active {
+  text-decoration: none;
+}
+
 
 /* 高级感的欢迎信息样式 */
 .welcome-message {

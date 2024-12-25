@@ -2,7 +2,7 @@
   <div class="lab-reservation">
     <!-- 选择实验室和周次 -->
     <div class="lab-selection">
-      <span class="showEX">请选择实验室和周次信息显示</span>
+      <span class="showEX">请选择实验室和周次信息</span>
       <el-row class="selection-row" gutter="20">
         <!-- 选择实验室 -->
         <el-col :span="12">
@@ -67,9 +67,14 @@
 </template>
 
 <script setup>
+
+// const data = {
+//   "acccount" : "admin",
+// }
+
 import { ref, onMounted } from 'vue'
 import { getLabInfo, getScheduleData, getLabManager,getLabs,updateScheduleData,postLabInfo,postLabManager } from '@/api/lab'
-import axios from 'axios';
+
 
 const lab = ref({
   id:'',
@@ -129,7 +134,7 @@ onMounted(async () => {
     // 获取实验室信息
     const labInfo = await getLabInfo()
     lab.value = labInfo.data
-    console.log("实验室信息:", JSON.stringify(lab.value, null, 2));
+    // console.log("实验室信息:", JSON.stringify(lab.value, null, 2));
     // 赋值实验室信息
 
     const labSchedule = await getScheduleData();
@@ -151,7 +156,7 @@ onMounted(async () => {
 
     const labM = await getLabManager()
     labManager.value = labM.data
-    console.log('实验室管理员信息：', JSON.stringify(labManager.value, null, 2));
+    // console.log('实验室管理员信息：', JSON.stringify(labManager.value, null, 2));
 
   } catch (error) {
     console.log('Lab数据获取失败')
@@ -304,31 +309,33 @@ const fillScheduleData = (data) => {
 
 <style scoped>
 .lab-reservation {
-  padding: 30px;
-  background: #f9fafb;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  background: #f5f7fa; /* 淡灰色背景，更加柔和 */
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #444;
+  color: #333; /* 深灰色字体 */
+  border-top: 4px solid #8e44ad; /* 深紫色上边界 */
 }
 
 .lab-info {
   background: #ffffff;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  margin-bottom: 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 细腻的阴影，增强层次感 */
+  margin-bottom: 30px;
+  border-top: 4px solid #27ae60; /* 绿色上边界 */
 }
 
 .lab-info .lab-header {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .lab-header h2 {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 10px;
+  color: #2c3e50; /* 深蓝灰色 */
+  margin-bottom: 12px;
   line-height: 1.4;
 }
 
@@ -355,8 +362,9 @@ const fillScheduleData = (data) => {
   background: #ffffff;
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  margin-top: 30px; /* 增加课表部分和上面块的间距 */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* 深一点的阴影 */
+  margin-top: 30px;
+  border-top: 4px solid #f39c12; /* 金色上边界 */
 }
 
 .schedule-table .el-table {
@@ -365,14 +373,16 @@ const fillScheduleData = (data) => {
 }
 
 .schedule-table .el-table th {
-  background: #f4f6f9;
-  color: #5f6d7e;
+  background: linear-gradient(135deg, #6a7f9a, #9bb2c8); /* 渐变灰蓝色，更加优雅 */
+  color: #ffffff;
   font-weight: 500;
+  padding: 15px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05); /* 细微的内阴影 */
 }
 
 .schedule-table .el-table td {
   color: #444;
-  padding: 12px 15px;
+  padding: 15px;
 }
 
 .schedule-table .el-table-column {
@@ -388,30 +398,27 @@ const fillScheduleData = (data) => {
   background: #ffffff;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  margin-top: 40px; /* 增加负责人信息部分和上面块的间距 */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* 深阴影 */
+  margin-top: 40px;
+  border-top: 4px solid #e74c3c; /* 红色上边界 */
 }
 
 .lab-footer h3 {
   font-size: 22px;
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .lab-footer p {
   font-size: 16px;
   color: #7f8c8d;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   line-height: 1.6;
 }
 
-.lab-footer p:last-child {
-  margin-bottom: 0;
-}
-
 .lab-footer .lab-footer-item {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   font-weight: 400;
   display: flex;
   justify-content: space-between;
@@ -429,64 +436,60 @@ const fillScheduleData = (data) => {
 
 .lab-footer .lab-footer-item .icon {
   font-size: 18px;
-  color: #3498db;
+  color: #3498db; /* 保留蓝色点缀 */
 }
-
-
-
 
 .lab-selection {
   background: #ffffff;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  margin-top: 30px;  /* 与实验室信息部分和课表部分的间距 */
-  margin-bottom: 30px;  /* 增加与页面下方内容的间距 */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 0px;
+  margin-bottom: 30px;
+  border-top: 4px solid #9b59b6; /* 紫色上边界 */
 }
 
 .selection-row {
-  margin-bottom: 20px;  /* 给选择框之间加点间距 */
+  margin-bottom: 10px;
 }
 
 .el-select {
-  width: 100%;  /* 让选择框宽度为100%，适应容器 */
+  width: 100%;
 }
 
 .el-button {
   display: block;
   width: 100%;
-  margin-top: 20px;  /* 按钮和选择框之间的间距 */
-  margin-bottom: 20px;  /* 按钮和下面内容之间的间距 */
+  margin-top: 25px;
+  margin-bottom: 20px;
   font-size: 16px;
+  background: linear-gradient(45deg, #8e44ad, #3498db); /* 渐变紫蓝色 */
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); /* 为按钮增加阴影 */
 }
 
-.el-button--primary {
-  background-color: #409EFF;
-  border-color: #409EFF;
-  font-size: 16px;
+.el-button:hover {
+  background: linear-gradient(45deg, #9b59b6, #2980b9); /* 按钮悬浮效果 */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
-
-.el-button--primary:hover {
-  background-color: #66b1ff;
-  border-color: #66b1ff;
-}
-
 
 .showEX {
   font-size: 18px;
   font-weight: 600;
-  color: #2c3e50;  /* 深灰色，符合现代感 */
-  margin-bottom: 20px;  /* 上方间距 */
-  padding: 12px 25px;  /* 内边距，增添空间感 */
-  background: linear-gradient(45deg, #409EFF, #66b1ff);  /* 渐变色背景，提升高级感 */
-  border-radius: 8px;  /* 圆角边框，柔和的视觉效果 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  /* 阴影效果，增加立体感 */
-  text-align: center;  /* 使文本居中 */
-  display: block;  /* 使 span 元素表现为块级元素 */
-  max-width: 300px;  /* 限制最大宽度，避免过宽 */
+  color: #fff; /* 白色字体 */
+  margin-bottom: 20px;
+  padding: 14px 25px;
+  background: linear-gradient(45deg, #8e44ad, #3498db); /* 渐变紫蓝色 */
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: block;
+  max-width: 300px;
   margin-left: auto;
-  margin-right: auto;  /* 水平居中 */
+  margin-right: auto;
 }
-
 
 </style>

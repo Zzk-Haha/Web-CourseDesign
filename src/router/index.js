@@ -2,7 +2,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import LabReseration from '../components/LabReservation.vue'
+import InfoManage   from "@/components/InfoManage.vue";
 import Login from '../components/Login.vue'
+import CourseManage from "@/components/CourseManage.vue";
+import AdminManage from "@/components/AdminManage.vue";
 
 const routes = [
     {
@@ -20,6 +23,22 @@ const routes = [
         name:'LabReseration',
         component:LabReseration
     },
+    {
+        path:'/infomanage',
+        name:'InfoManage',
+        component:InfoManage
+
+    },
+    {
+        path:'/coursemanage',
+        name:'CourseManage',
+        component:CourseManage
+    },
+    {
+        path:'/adminmanage',
+        name:'AdminManage',
+        component:AdminManage
+    }
 
 
 ];

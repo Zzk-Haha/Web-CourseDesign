@@ -229,6 +229,7 @@ export async function postLabManager(id) {
         console.error('Token is missing.');
         throw new Error('后端未验证，无法登录');  // 如果没有token，抛出错误
     }
+    //请求体
     const requestData = {
         id: id,
     }
