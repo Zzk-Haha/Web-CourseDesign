@@ -6,7 +6,7 @@
         <el-col :span="24">
           <div class="admin-tip-content">
             <el-icon name="el-icon-info" class="admin-tip-icon" />
-            <span class="admin-tip-text">欢迎来到教师管理系统 - 管理员界面</span>
+            <span class="admin-tip-text">欢迎来到实验室预约管理系统 - 管理员界面</span>
           </div>
         </el-col>
       </el-row>
@@ -119,7 +119,7 @@ const addNewTeacher = async () => {
 // 确认删除教师
 const confirmDelete = async (teacher) => {
   try {
-    const confirmed = await ElMessageBox.confirm('删除内容为敏感内容，是否确认？', '提示', {
+    const confirmed = await ElMessageBox.confirm('该操作将会删除该教师的信息和所有关联信息，是否确认？', '提示', {
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning'
@@ -134,7 +134,7 @@ const confirmDelete = async (teacher) => {
       teachers.value = updatedTeacherList.data;
     }
   } catch (error) {
-    ElMessage.error(error.message);
+    // ElMessage.error(error.message);
   }
 };
 </script>

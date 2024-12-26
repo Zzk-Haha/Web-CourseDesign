@@ -7,7 +7,7 @@ const route = useRoute();
 
 <template>
   <div id="app" class="app-container">
-    <Sidenav v-if="route.name !== 'Login'" />
+    <Sidenav v-if="route.name !== 'Login' && route.name !== 'AdminManage'" />
     <div class="main-content">
       <router-view />
     </div>

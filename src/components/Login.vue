@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import Captcha from './Captcha.vue';
-import {ca} from "element-plus/es/locale/index";
+import {ElMessage} from "element-plus";
 
 const router = useRouter();
 
@@ -15,8 +15,9 @@ const userData = ref(null); // 用于保存用户信息
 const account = ref('');
 const password = ref('');
 const captcha = ref('');
+const realCaptcha = ref('');
 
-
+// 处理登录
 const handleLogin = async (event) => {
   event.preventDefault(); // 防止表单默认提交行为
 
@@ -27,7 +28,15 @@ const handleLogin = async (event) => {
 
   // 校验验证码是否正确，假设验证码是必填的且不为空
   if (!captcha) {
-    message.value = '请输入验证码';
+    ElMessage.error('请输入验证码')
+    return;
+  }
+
+  // 校验验证码是否正确
+  if (captcha !== realCaptcha.value) {
+    ElMessage.error('验证码错误')
+    event.target.captcha.value = '' // 清空验证码输入框
+
     return;
   }
 
@@ -42,74 +51,92 @@ const handleLogin = async (event) => {
         'Content-Type': 'application/json'
       }
     });
-
-
-    if (response.data.code === 200) {
+    const reply = response.data
+    if (reply.code === 200) {
       userData.value = response.data.data;
+      // 登录成功时，保存用户信息到 localStorage
+      localStorage.setItem('userData', JSON.stringify(userData.value));
       // 登录成功时，保存 token 和 role 到 localStorage
       localStorage.setItem('token', response.headers['token']);
       localStorage.setItem('role', response.headers['role']);
-
-      // 打印日志，确认 token 是否已正确保存
-      console.log("token:", response.headers['token']);
-      console.log("role:", response.headers['role']);
-      console.log(userData.value)
-
-      // 将用户信息保存到localStorage
-      localStorage.setItem('userData', JSON.stringify(userData.value));
-
+      ElMessage.success("教师登录成功")
 
       // 登录成功，跳转到教师首页
       router.push('/index');
-    } else {
+    }
+    else if (reply.code === 400){
+      event.target.password.value = ''
+
+      ElMessage.error(reply.msg)
+    }
+    else {
       // 登录失败，显示错误信息
-      message.value = response.data.message || '登录失败';
+      // message.value = response.data.message || '登录失败';
+      ElMessage.value('登录失败,请检查网络连接')
     }
   } catch (error) {
-
-    message.value = '网络错误，请稍后再试';
+    ElMessage.value('网络错误，请稍后再试')
+    // message.value = '网络错误，请稍后再试';
   }
 };
 
+// 处理管理员登录
 const handleAdminLogin = async (event) => {
   event.preventDefault(); // 防止表单默认提交行为
 
   // 校验验证码是否正确，假设验证码是必填的且不为空
   if (!captcha) {
-    message.value = '请输入验证码';
+    ElMessage.error('请输入验证码');
+    // message.value = '请输入验证码';
+    return;
+  }
+  // 校验验证码是否正确
+  if (captcha.value !== realCaptcha.value) {
+    // console.log("readCaptcha:"+ realCaptcha.value)
+    // console.log("captcha:"+ captcha.value)
+    ElMessage.error('验证码错误')
+    event.target.captcha.value = '' // 清空验证码输入框
     return;
   }
 
   try {
     // 向后端发送管理员登录请求
     const response = await axios.post('http://localhost:8080/api/login', {
-      account:account.value,
-      password:password.value,
-      captcha:captcha.value
-
+      account: account.value,
+      password: password.value,
+      captcha: captcha.value
     }, {
       headers: {
         'Content-Type': 'application/json'
       }
     });
 
+    const reply = response.data
 
-    if (response.data.code === 200) {
+    if (reply.code === 200) {
       // 登录成功，保存管理员信息
       userData.value = response.data.data; // 保存管理员信息
-      localStorage.setItem('token',  response.headers['token']); // 保存 token
-      localStorage.setItem('role',  response.headers['role']); // 保存 role
+      localStorage.setItem('userData', JSON.stringify(userData.value));
+      localStorage.setItem('token', response.headers['token']); // 保存 token
+      localStorage.setItem('role', response.headers['role']); // 保存 role
 
-      // console.log(userData.value)
-
+      ElMessage.success("管理员登录成功")
       // 跳转到管理员首页
       router.push('/adminmanage');
-    } else {
+    }
+    else if(reply.code === 400) {
+      console.log(reply.msg)
+      ElMessage.error(reply.msg)
+
+    }
+    else{
       // 登录失败，显示错误信息
-      message.value = response.data.message || '登录失败';
+      // message.value = response.data.message || '登录失败';
+      ElMessage.error( '登录失败,请检查网络连接')
     }
   } catch (error) {
-    message.value = '网络错误，请稍后再试';
+    // message.value = '网络错误，请稍后再试';
+    ElMessage.error('网络错误，请稍后再试')
   }
 };
 </script>
@@ -125,7 +152,7 @@ const handleAdminLogin = async (event) => {
 
           <!-- 验证码输入框 -->
           <div class="captcha-container">
-            <Captcha/>
+            <Captcha v-model="realCaptcha" /> <!-- 使用v-model绑定 realCaptcha -->
             <input type="text" placeholder="Enter Captcha" name="captcha" v-model="captcha" required/>
           </div>
 
@@ -273,3 +300,4 @@ h2 {
   }
 }
 </style>
+

@@ -1,18 +1,28 @@
 <script setup>
-import { ref } from 'vue';
+import {defineProps, defineEmits, ref} from 'vue';
+
+const props = defineProps({
+  modelValue: String // 接收父组件传递的验证码值
+});
+
+const emit = defineEmits(['update:modelValue']); // 用于通知父组件更新值
 
 const captchaText = ref('');
 
+// 生成验证码
 const generateCaptcha = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   captchaText.value = '';
   for (let i = 0; i < 6; i++) {
     captchaText.value += characters.charAt(Math.floor(Math.random() * characters.length));
   }
+
+  // 发射事件更新父组件的验证码
+  emit('update:modelValue', captchaText.value);
 };
 
-generateCaptcha(); // 页面加载时生成验证码
-
+// 页面加载时生成验证码
+generateCaptcha();
 </script>
 
 <template>

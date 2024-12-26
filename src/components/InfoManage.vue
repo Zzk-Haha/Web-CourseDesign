@@ -1,97 +1,99 @@
 <template>
   <div class="info-manage">
-    <!-- 固定顶部导航 -->
-    <el-row class="info-header" :gutter="20">
-      <el-col :span="24" class="welcome-message">
-        <span>欢迎回来，{{ teacherInfo.webName  }}</span>
-      </el-col>
-    </el-row>
+      <!-- 固定顶部导航 -->
+      <el-row class="info-header" :gutter="20">
+        <el-col :span="24" class="welcome-message">
+          <span>欢迎回来，{{ teacherInfo.webName  }}</span>
+        </el-col>
+      </el-row>
 
-    <!-- 主体内容区域 -->
-    <div class="main-content">
-      <el-card class="info-card">
-        <el-row>
-          <el-col :span="6" class="avatar-container">
-            <img src="@/assets/img/avatar.jpg" alt="用户头像">
-          </el-col>
-          <el-col :span="18">
-            <div class="info-item">
-              <strong>工号：</strong>{{ teacherInfo.account }}
-            </div>
-            <div class="info-item">
-              <strong>姓名：</strong>{{ teacherInfo.webName  }}
-            </div>
-            <div class="info-item">
-              <strong>专业：</strong>{{ teacherInfo.major }}
-            </div>
-            <div class="info-item">
-              <strong>邮箱：</strong>{{ teacherInfo.email }}
-            </div>
-            <div class="info-item">
-              <strong>手机号：</strong>{{ teacherInfo.phone }}
-            </div>
-          </el-col>
-        </el-row>
-      </el-card>
+      <!-- 主体内容区域 -->
+      <div class="main-content">
+        <el-card class="info-card">
+          <el-row>
+            <el-col :span="6" class="avatar-container">
+              <img src="@/assets/img/avatar.jpg" alt="用户头像">
+            </el-col>
+            <el-col :span="18">
+              <div class="info-item">
+                <strong>工号：</strong>{{ teacherInfo.account }}
+              </div>
+              <div class="info-item">
+                <strong>昵称：</strong>{{ teacherInfo.webName  }}
+              </div>
+              <div class="info-item">
+                <strong>专业：</strong>{{ teacherInfo.major }}
+              </div>
+              <div class="info-item">
+                <strong>邮箱：</strong>{{ teacherInfo.email }}
+              </div>
+              <div class="info-item">
+                <strong>手机号：</strong>{{ teacherInfo.phone }}
+              </div>
+            </el-col>
+          </el-row>
+        </el-card>
 
-      <!-- 编辑信息和修改密码按钮 -->
-      <div class="action-buttons">
-        <el-button type="success" @click="handleEditInfo" class="edit-info-btn">
-          编辑信息
-        </el-button>
-        <el-button type="primary" @click="handleChangePassword" class="change-password-btn">
-          修改密码
-        </el-button>
-      </div>
+        <!-- 编辑信息和修改密码按钮 -->
+        <div class="action-buttons">
+          <el-button type="success" @click="handleEditInfo" class="edit-info-btn">
+            编辑信息
+          </el-button>
+          <el-button type="primary" @click="handleChangePassword" class="change-password-btn">
+            修改密码
+          </el-button>
+        </div>
 
-      <!-- 自定义编辑个人信息弹出框 -->
-      <div v-if="isEditDialogVisible" class="custom-dialog-overlay" @click="closeDialog">
-        <div class="custom-dialog" @click.stop>
-          <div class="dialog-header">
-            <span class="dialog-title">编辑个人信息</span>
-            <button @click="closeDialog" class="dialog-close-btn">X</button>
-          </div>
-          <el-form :model="form" ref="formRef" label-width="80px">
-            <el-form-item label="姓名" prop="name" :rules="nameRules">
-              <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱" prop="email" :rules="emailRules">
-              <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
-            </el-form-item>
-            <el-form-item label="电话" prop="phone" :rules="phoneRules">
-              <el-input v-model="form.phone" placeholder="请输入电话"></el-input>
-            </el-form-item>
-          </el-form>
-          <div class="dialog-footer">
-            <el-button @click="closeDialog">取 消</el-button>
-            <el-button type="primary" @click="submitInfoChange">确 定</el-button>
+        <!-- 自定义编辑个人信息弹出框 -->
+        <div v-if="isEditDialogVisible" class="custom-dialog-overlay" @click="closeDialog">
+          <div class="custom-dialog" @click.stop>
+            <div class="dialog-header">
+              <span class="dialog-title">编辑个人信息</span>
+              <button @click="closeDialog" class="dialog-close-btn">X</button>
+            </div>
+            <el-form :model="form" ref="formRef" label-width="80px">
+              <el-form-item label="昵称" prop="name" :rules="nameRules">
+                <el-input v-model="form.name" placeholder="请输入昵称"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" prop="email" :rules="emailRules">
+                <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
+              </el-form-item>
+              <el-form-item label="电话" prop="phone" :rules="phoneRules">
+                <el-input v-model="form.phone" placeholder="请输入电话"></el-input>
+              </el-form-item>
+            </el-form>
+            <div class="dialog-footer">
+              <el-button @click="closeDialog">取 消</el-button>
+              <el-button type="primary" @click="submitInfoChange">确 定</el-button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- 自定义修改密码弹出框 -->
-      <div v-if="isDialogVisible" class="custom-dialog-overlay" @click="closeDialog">
-        <div class="custom-dialog" @click.stop>
-          <div class="dialog-header">
-            <span class="dialog-title">修改密码</span>
-            <button @click="closeDialog" class="dialog-close-btn">X</button>
-          </div>
-          <el-form :model="form" ref="formRef" label-width="80px">
-            <el-form-item label="新密码" prop="password" :rules="passwordRules" >
-              <el-input v-model="form.password" type="password" placeholder="请输入新密码" required></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="confirmPassword" :rules="confirmPasswordRules" >
-              <el-input v-model="form.confirmPassword" type="password" placeholder="请确认新密码" required></el-input>
-            </el-form-item>
-          </el-form>
-          <div class="dialog-footer">
-            <el-button @click="closeDialog">取 消</el-button>
-            <el-button type="primary" @click="submitPasswordChange">确 定</el-button>
+        <!-- 自定义修改密码弹出框 -->
+        <div v-if="isDialogVisible" class="custom-dialog-overlay" @click="closeDialog">
+          <div class="custom-dialog" @click.stop>
+            <div class="dialog-header">
+              <span class="dialog-title">修改密码</span>
+              <button @click="closeDialog" class="dialog-close-btn">X</button>
+            </div>
+            <el-form :model="form" ref="formRef" label-width="80px">
+              <el-form-item label="新密码" prop="password" :rules="passwordRules" >
+                <el-input v-model="form.password" type="password" placeholder="请输入新密码" required></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码" prop="confirmPassword" :rules="confirmPasswordRules" >
+                <el-input v-model="form.confirmPassword" type="password" placeholder="请确认新密码" required></el-input>
+              </el-form-item>
+            </el-form>
+            <div class="dialog-footer">
+              <el-button @click="closeDialog">取 消</el-button>
+              <el-button type="primary" @click="submitPasswordChange">确 定</el-button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+
 </template>
 
 <script setup>
@@ -161,12 +163,19 @@ function handleEditInfo() {
 
 // 修改个人信息
 async function submitInfoChange() {
-  // 更新 teacherInfo 后，vue 会自动重新渲染
-  teacherInfo.webName = form.value.name;
-  teacherInfo.email = form.value.email;
-  teacherInfo.phone = form.value.phone;
 
+
+
+  if(form.value.name === '' || form.value.email === '' || form.value.phone === ''){
+    ElMessage.error("信息均不能为空")
+    return
+  }
+  // 更新 teacherInfo 后，vue 会自动重新渲染
+    teacherInfo.webName = form.value.name;
+    teacherInfo.email = form.value.email;
+    teacherInfo.phone = form.value.phone;
   localStorage.setItem('userData', JSON.stringify(teacherInfo));
+
 
   try {
     const response = await postTeacherInfo(
@@ -228,6 +237,7 @@ function closeDialog() {
 </script>
 
 <style scoped>
+
 /* 背景遮罩 */
 .custom-dialog-overlay {
   position: fixed;

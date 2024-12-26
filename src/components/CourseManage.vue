@@ -100,7 +100,7 @@
 import { ref, onMounted } from 'vue';
 import { getCourseData, delCourse } from "@/api/course.js";
 import axios from "axios";
-import { ElMessage } from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 const Info = ref({ id: '', name: '', major: '', email: '', phone: '', avatar: '', account: '', webName: '' });
 const courses = ref([]);
@@ -198,6 +198,18 @@ async function removeCourse(index) {
   const course = courses.value[index];
   const courseId = course.courseId;
   const teacherAccount = Info.value.account;
+
+  await ElMessageBox.confirm(
+      '删除后不可恢复，您确定要删除此项吗？',
+      '确认删除',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        customClass: 'custom-messagebox',
+      }
+  );
+
 
   try {
     const result = await delCourse(teacherAccount, courseId);
