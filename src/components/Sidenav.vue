@@ -35,7 +35,7 @@
         <el-menu-item index="2">
           <el-icon><icon-menu /></el-icon>
           <template #title>
-            <span>实验室预约</span>
+            <span>实验室预约信息</span>
           </template>
         </el-menu-item>
       </router-link>

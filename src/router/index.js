@@ -7,6 +7,8 @@ import Login from '../components/Login.vue'
 import CourseManage from "@/components/CourseManage.vue";
 import AdminManage from "@/components/AdminManage.vue";
 import CurrentReservation   from "@/components/CurrentReservation.vue";
+import CourseReservation   from "@/components/CourseReservation.vue";
+
 const routes = [
     {
         path:'/',
@@ -44,6 +46,11 @@ const routes = [
         name:'CurrentReservation',
         component:CurrentReservation
 
+    },
+    {
+     path:'/coursereservation',
+     name:'CourseReservation',
+     component:CourseReservation
     }
 
 
