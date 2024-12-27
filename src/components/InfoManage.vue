@@ -3,7 +3,7 @@
       <!-- 固定顶部导航 -->
       <el-row class="info-header" :gutter="20">
         <el-col :span="24" class="welcome-message">
-          <span>欢迎回来，{{ teacherInfo.webName  }}</span>
+          <span>欢迎回来，{{ teacherInfo.name  }}</span>
         </el-col>
       </el-row>
 

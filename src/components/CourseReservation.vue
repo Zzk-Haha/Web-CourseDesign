@@ -7,7 +7,7 @@
              type="number" id="studentCount"
              name="studentCount"
              @input="handleStudentCountInput" />
-      <button @click="fetchLabs" class="primary-button">获取实验室</button>
+      <button @click="fetchLabs" class="primary-button">查询实验室</button>
     </div>
     <div v-if="labs.length > 0" class="lab-table-container">
       <table>
@@ -16,6 +16,7 @@
           <th>实验室名称</th>
           <th>实验室容量</th>
           <th>实验室状态</th>
+          <th>实验室配置</th>
           <th>预约操作</th>
         </tr>
         </thead>
@@ -24,6 +25,7 @@
           <td>{{ lab.name }}</td>
           <td>{{ lab.capacity }}</td>
           <td>{{ lab.status }}</td>
+          <td>{{lab.configuration}}</td>
           <td>
             <button @click="openModal(lab.id)" class="secondary-button">预约</button>
           </td>
@@ -46,8 +48,8 @@
           <div class="form-field">
             <label for="tempReservation">是否临时预约:</label>
             <select v-model="tempReservation">
-              <option value="true">是</option>
               <option value="false">否</option>
+              <option value="true">是</option>
             </select>
           </div>
           <div class="form-field">
@@ -98,7 +100,7 @@ const labs = ref([]);
 const showModal = ref(false);
 const courseId = ref('');
 const courseName = ref('');
-const tempReservation = ref('true');
+const tempReservation = ref('false');
 const week = ref('1');
 const day = ref('周一');
 const period = ref('1-2');
@@ -116,6 +118,13 @@ const fetchLabs = async () => {
   try {
     const LabData = await getLabCapacity(studentCount.value);
     labs.value = LabData.data;
+
+    if(LabData.data.length === 0){
+      ElMessage.error("没有实验室可以容纳这么多人");
+    }else{
+
+      ElMessage.success("获取实验室成功");
+    }
   } catch (error) {
     console.error('获取实验室信息时出错:', error);
   }
@@ -174,19 +183,22 @@ const submitForm = async () => {
 
     if (validationResponse.data.code === 200) {
       const reserveResponse = await axios.post('http://localhost:8080/api/teacher/addReservation', requestBody,{
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}` // 加上 Authorization 头部
-            }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+        }
       });
       if (reserveResponse.data.code === 200) {
         ElMessage.success("预约成功");
         closeModal();
-      } else {
+      }else if ((reserveResponse.data.code === 409)){
+        ElMessage.error("该时段已被占用，预约失败");
+      }
+      else {
         ElMessage.error("预约失败，请检查网络连接");
       }
     } else if (validationResponse.data.code === 404) {
-      ElMessage.error('请先添加课程');
+      ElMessage.error('您还未拥有此课程，请到课程管理手动添加');
     } else {
       console.error('课程验证失败');
     }
@@ -197,6 +209,7 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
+
 .lab-reservation-container {
   max-width: 900px;
   margin: 0 auto;
@@ -213,27 +226,38 @@ h2 {
   font-weight: 600;
   color: #333;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .input-section {
   display: flex;
+  align-items: center; /* 使label和input居中对齐 */
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
 .input-section label {
-  font-size: 16px;
+  font-size: 18px; /* 增加字体大小 */
   font-weight: 500;
+  color: #333;
+  width: 30%; /* 设置固定宽度，让label与input对齐 */
+  text-align: right; /* 将label的文本向右对齐 */
+  margin-right: 20px; /* 给label和input之间添加一些间距 */
 }
 
 .input-section input {
-  width: 60%;
+  width: 60%; /* 输入框占60%的宽度 */
   padding: 12px 16px;
   border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s ease;
 }
 
+.input-section input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 .primary-button {
   background-color: #4CAF50;
   color: white;
@@ -242,11 +266,36 @@ h2 {
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 150px;
+  height: 50px;
+  margin: 0 10px;
 }
+
 
 .primary-button:hover {
   background-color: #45a049;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.primary-button:active {
+  background-color: #388e3c;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+}
+
+.primary-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 蓝色焦点 */
+}
+
+.primary-button.disabled {
+  background-color: #b5e8a3;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .secondary-button {
@@ -358,8 +407,7 @@ tr:hover {
   margin-bottom: 8px;
 }
 
-.form-field input,
-.form-field select {
+.form-field input {
   width: 90%;
   padding: 12px 16px;
   border-radius: 8px;
@@ -368,12 +416,7 @@ tr:hover {
   margin-bottom: 12px;
 }
 
-.form-field select {
-  background-color: #f9f9f9;
-}
-
-.form-field input:focus,
-.form-field select:focus {
+.form-field input:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
@@ -392,6 +435,79 @@ button[type="submit"] {
 button[type="submit"]:hover {
   background-color: #0056b3;
 }
+
+/* 跟进下拉框 */
+/* 改进下拉框样式 */
+.form-field select {
+  width: 90%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  margin-bottom: 12px;
+  background-color: #fff;
+  appearance: none; /* 去掉原生浏览器样式 */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative; /* 用于定位下拉箭头 */
+}
+
+.form-field select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-field select:hover {
+  border-color: #007bff;
+}
+
+/* 下拉框箭头 */
+.form-field select::after {
+  content: '▼'; /* 自定义下拉箭头 */
+  font-size: 14px;
+  color: #aaa;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* 为了使选择框和箭头更加协调，可以添加一个背景 */
+.form-field select:focus::after {
+  color: #007bff;
+}
+
+/* 用伪元素来创建一个下拉框背景 */
+.form-field select::-ms-expand {
+  display: none; /* 禁止 IE 的默认下拉箭头 */
+}
+
+.form-field select option {
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* 下拉框打开时的动画 */
+.form-field select {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-field select option:hover {
+  background-color: #f1f1f1;
+  color: #007bff;
+}
+
+/* 更加突出的选中项样式 */
+.form-field select option:checked {
+  background-color: #007bff;
+  color: white;
+}
+
+.form-field select:focus {
+  outline: none; /* 移除默认的焦点样式 */
+}
+
 
 </style>
 

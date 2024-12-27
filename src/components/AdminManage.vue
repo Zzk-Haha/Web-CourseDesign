@@ -96,7 +96,7 @@ const addNewTeacher = async () => {
     account: newTeacher.value.account,
     major: newTeacher.value.major,
     phone: newTeacher.value.phone,
-    name: newTeacher.value.name
+    name: newTeacher.value.name,
   };
 
   try {

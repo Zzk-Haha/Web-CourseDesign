@@ -48,7 +48,7 @@ export async function addTeacher(teacherData) {
     const requestData = {
         name: teacherData.name,
         account: teacherData.account,
-        email: "",
+        email: null,
         phone: teacherData.phone,
         major:teacherData.major,
         password: teacherData.account,

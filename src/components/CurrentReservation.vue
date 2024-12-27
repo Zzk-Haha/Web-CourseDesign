@@ -47,7 +47,7 @@ import { reservation, removeReservation } from '@/api/reservation.js';
 
 const reservations = ref([]);
 
-const teacherInfo = reactive({
+let teacherInfo = reactive({
   id: '',
   name: '',
   major: '',
@@ -59,19 +59,26 @@ const teacherInfo = reactive({
 });
 
 onMounted(async () => {
-  const reply = await reservation("2022212968");
-  reservations.value = reply.data;
+
+
 
   const storedUserData = localStorage.getItem('userData');
+
   if (storedUserData) {
     try {
-      const parsedData = JSON.parse(storedUserData);
-      Object.assign(teacherInfo, parsedData);
+      // 解析存储的 JSON 字符串并赋值给 teacherInfo
+      Object.assign(teacherInfo, JSON.parse(storedUserData));
     } catch (error) {
       console.error('无法解析 localStorage 中的用户数据:', error);
     }
   }
-  console.log(teacherInfo)
+
+  // 拉取该教师的预约信息
+  const reply = await reservation(teacherInfo.account);
+  reservations.value = reply.data;
+  // console.log("这是当前浏览器存储的个人信息："+(storedUserData))
+  // console.log("这是teacherInfo的信息："+JSON.stringify(teacherInfo));
+
 
 });
 
