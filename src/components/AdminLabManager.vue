@@ -1,5 +1,5 @@
 <template>
-  <div class="teacherList">
+  <div class="labManagerList">
     <!-- 管理员提示信息 -->
     <div class="admin-tip">
       <el-row>
@@ -12,46 +12,50 @@
       </el-row>
     </div>
 
-    <!-- 添加教师区域 -->
-    <div class="addTeacher">
+    <!-- 添加实验室负责人区域 -->
+    <div class="addLabManager">
       <div class="section-header">
-        <span>添加教师</span>
+        <span>添加实验室负责人</span>
       </div>
       <div class="section-description">
-        请填写以下表单添加新教师。
+        请填写以下表单添加新的实验室负责人。
       </div>
       <el-row gutter="20">
         <el-col :span="6">
-          <el-input v-model="newTeacher.account" placeholder="教师工号" class="input-field" />
+          <el-input v-model="newLabManager.id" placeholder="管理员工号" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newTeacher.major" placeholder="教师专业" class="input-field" />
+          <el-input v-model="newLabManager.name" placeholder="管理员姓名" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newTeacher.phone" placeholder="教师联系电话" class="input-field" />
+          <el-input v-model="newLabManager.email" placeholder="管理员邮箱" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newTeacher.name" placeholder="教师姓名" class="input-field" />
+          <el-input v-model="newLabManager.position" placeholder="职位" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-button type="primary" @click="addNewTeacher" class="add-button">添加</el-button>
+          <el-input v-model="newLabManager.phone" placeholder="管理员联系电话" class="input-field" />
+        </el-col>
+        <el-col :span="6">
+          <el-button type="primary" @click="addNewLabManager" class="add-button">添加</el-button>
         </el-col>
       </el-row>
     </div>
 
-    <!-- 教师列表区域 -->
-    <div class="teacherTable">
+    <!-- 实验室负责人列表区域 -->
+    <div class="labManagerTable">
       <div class="section-header">
-        <span>教师列表</span>
+        <span>实验室负责人列表</span>
       </div>
       <div class="section-description">
-        这里展示所有已添加的教师信息，您可以进行删除操作。
+        这里展示所有已添加的实验室负责人信息，您可以进行删除操作。
       </div>
-      <el-table border :data="teachers" class="teacher-table">
-        <el-table-column label="教师姓名" prop="name"></el-table-column>
-        <el-table-column label="教师工号" prop="account"></el-table-column>
-        <el-table-column label="教师专业" prop="major"></el-table-column>
-        <el-table-column label="教师联系电话" prop="phone"></el-table-column>
+      <el-table border :data="labManagers" class="lab-manager-table">
+        <el-table-column label="负责人姓名" prop="name"></el-table-column>
+        <el-table-column label="负责人工号" prop="id"></el-table-column>
+        <el-table-column label="管理员邮箱" prop="email"></el-table-column>
+        <el-table-column label="职位" prop="position"></el-table-column>
+        <el-table-column label="联系电话" prop="phone"></el-table-column>
         <el-table-column label="操作" fixed="right">
           <template #default="scope">
             <el-button type="danger" @click="confirmDelete(scope.row)" class="delete-button">删除</el-button>
@@ -64,74 +68,77 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getTeachers, addTeacher, deleteTeacher } from '@/api/admin'
+import { getLabManager, addLabManager, deleteLabManager } from '@/api/adminLabManager'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
-const teachers = ref([]);
-const newTeacher = ref({
-  account: '',
-  major: '',
-  phone: '',
-  name: ''
+const labManagers = ref([]);  // 存储实验室负责人列表
+const newLabManager = ref({
+  id: '',
+  name: '',
+  email: '',
+  position: '',
+  phone: ''
 });
 
-// 页面加载时获取教师列表
+// 页面加载时获取实验室负责人列表
 onMounted(async () => {
   try {
-    const teacherList = await getTeachers();
-    teachers.value = teacherList.data;
+    const managerList = await getLabManager();
+    labManagers.value = managerList.data;
   } catch (error) {
-    ElMessage.error('获取教师列表时出错：' + error.message);
+    ElMessage.error('获取实验室负责人列表时出错：' + error.message);
   }
 });
 
-// 添加新教师
-const addNewTeacher = async () => {
-  if (!newTeacher.value.account || !newTeacher.value.major || !newTeacher.value.phone || !newTeacher.value.name) {
+// 添加新的实验室负责人
+const addNewLabManager = async () => {
+  if (!newLabManager.value.id || !newLabManager.value.name || !newLabManager.value.email || !newLabManager.value.position || !newLabManager.value.phone) {
     ElMessage.warning('请填写所有必填信息');
     return;
   }
 
-  const newTeacherData = {
-    account: newTeacher.value.account,
-    major: newTeacher.value.major,
-    phone: newTeacher.value.phone,
-    name: newTeacher.value.name,
+  const newLabManagerData = {
+    id: newLabManager.value.id,
+    name: newLabManager.value.name,
+    email: newLabManager.value.email,
+    position: newLabManager.value.position,
+    phone: newLabManager.value.phone,
   };
 
   try {
-    const response = await addTeacher(newTeacherData);
+    const response = await addLabManager(newLabManagerData);
 
     if (response.code === 200) {
-      ElMessage.success('教师添加成功');
-      const updatedTeacherList = await getTeachers();
-      teachers.value = updatedTeacherList.data;
+      ElMessage.success('实验室管负责人添加成功');
+      const updatedManagerList = await getLabManager();
+      labManagers.value = updatedManagerList.data;
 
-      newTeacher.value = { account: '', major: '', phone: '', name: '' };
+      // 清空表单
+      newLabManager.value = { id: '', name: '', email: '', position: '', phone: '' };
     } else {
-      ElMessage.error('添加教师失败');
+      ElMessage.error('添加实验室负责人失败');
     }
   } catch (error) {
     ElMessage.error(error.message);
   }
 };
 
-// 确认删除教师
-const confirmDelete = async (teacher) => {
+// 确认删除实验室负责人
+const confirmDelete = async (manager) => {
   try {
-    const confirmed = await ElMessageBox.confirm('该操作将会彻底移除该教师和其所有关联信息，谨慎操作，是否确认？', '提示', {
+    const confirmed = await ElMessageBox.confirm('该操作将会删除该实验室负责人的信息和所有关联信息，谨慎操作，是否确认？', '提示', {
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning'
     });
 
     if (confirmed === 'confirm') {
-      const account = teacher.account;
-      await deleteTeacher(account);
-      ElMessage.success('教师删除成功');
+      const managerId = manager.id;
+      await deleteLabManager(managerId);
+      ElMessage.success('实验室负责人删除成功');
 
-      const updatedTeacherList = await getTeachers();
-      teachers.value = updatedTeacherList.data;
+      const updatedManagerList = await getLabManager();
+      labManagers.value = updatedManagerList.data;
     }
   } catch (error) {
     // ElMessage.error(error.message);
@@ -140,7 +147,7 @@ const confirmDelete = async (teacher) => {
 </script>
 
 <style scoped>
-.teacherList {
+.labManagerList {
   padding: 30px;
   background: #f7f8fc;
   border-radius: 12px;
@@ -172,7 +179,7 @@ const confirmDelete = async (teacher) => {
   font-weight: bold;
 }
 
-.addTeacher {
+.addLabManager {
   background: #fff;
   padding: 25px;
   border-radius: 12px;
@@ -223,7 +230,7 @@ const confirmDelete = async (teacher) => {
   transform: translateY(-2px);
 }
 
-.teacherTable {
+.labManagerTable {
   margin-top: 30px;
   background: #fff;
   padding: 20px;
@@ -231,17 +238,17 @@ const confirmDelete = async (teacher) => {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.teacher-table .el-table__header {
+.lab-manager-table .el-table__header {
   background-color: #f1f3f8;
   color: #6c6f75;
   font-weight: 600;
 }
 
-.teacher-table .el-table__header th {
+.lab-manager-table .el-table__header th {
   font-size: 14px;
 }
 
-.teacher-table .el-table__body tr:hover {
+.lab-manager-table .el-table__body tr:hover {
   background-color: #f7f8fc;
 }
 
@@ -263,3 +270,4 @@ const confirmDelete = async (teacher) => {
   font-size: 14px;
 }
 </style>
+

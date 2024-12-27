@@ -1,5 +1,6 @@
 <script setup>
 import Sidenav from './components/Sidenav.vue'
+import AdminSideNav from "@/components/AdminSideNav.vue";
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -7,7 +8,8 @@ const route = useRoute();
 
 <template>
   <div id="app" class="app-container">
-    <Sidenav v-if="route.name !== 'Login' && route.name !== 'AdminManage'" />
+    <Sidenav v-if="route.name !== 'Login' && route.name !== 'AdminManage' && route.name !== 'AdminCourse' && route.name !== 'AdminLab' && route.name !== 'AdminLabManager'" />
+    <AdminSideNav v-if="route.name ==='AdminManage'|| route.name === 'AdminCourse' || route.name === 'AdminLab' || route.name === 'AdminLabManager'"/>
     <div class="main-content">
       <router-view />
     </div>

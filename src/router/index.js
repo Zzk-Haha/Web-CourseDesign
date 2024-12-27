@@ -8,7 +8,9 @@ import CourseManage from "@/components/CourseManage.vue";
 import AdminManage from "@/components/AdminManage.vue";
 import CurrentReservation   from "@/components/CurrentReservation.vue";
 import CourseReservation   from "@/components/CourseReservation.vue";
-
+import AdminCourse from "@/components/AdminCourse.vue";
+import AdminLab from "@/components/AdminLab.vue";
+import AdminLabManager from "@/components/AdminLabManager.vue";
 const routes = [
     {
         path:'/',
@@ -51,6 +53,22 @@ const routes = [
      path:'/coursereservation',
      name:'CourseReservation',
      component:CourseReservation
+    },
+    {
+     path:'/admincourse',
+     name:'AdminCourse',
+     component:AdminCourse
+
+    },
+    {
+     path:'/adminlab',
+     name:'AdminLab',
+     component:AdminLab
+    },
+    {
+     path:'/adminlabmanager',
+     name:'AdminLabManager',
+     component:AdminLabManager
     }
 
 

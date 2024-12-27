@@ -334,6 +334,9 @@ tr:hover {
   border: 2px solid #ddd;
   z-index: 1010;
   box-sizing: border-box; /* Ensure padding and borders are included in width */
+  /* 超出页面可滑动 */
+  overflow-y: auto;
+  max-height: 95vh; /* Adjust as needed */
 }
 
 /* Adjusting spacing between form items */

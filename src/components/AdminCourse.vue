@@ -1,5 +1,5 @@
 <template>
-  <div class="teacherList">
+  <div class="courseList">
     <!-- 管理员提示信息 -->
     <div class="admin-tip">
       <el-row>
@@ -12,46 +12,50 @@
       </el-row>
     </div>
 
-    <!-- 添加教师区域 -->
-    <div class="addTeacher">
+    <!-- 添加课程区域 -->
+    <div class="addCourse">
       <div class="section-header">
-        <span>添加教师</span>
+        <span>添加课程</span>
       </div>
       <div class="section-description">
-        请填写以下表单添加新教师。
+        请填写以下表单添加新课程。
       </div>
       <el-row gutter="20">
         <el-col :span="6">
-          <el-input v-model="newTeacher.account" placeholder="教师工号" class="input-field" />
+          <el-input v-model="newCourse.id" placeholder="课程ID" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newTeacher.major" placeholder="教师专业" class="input-field" />
+          <el-input v-model="newCourse.name" placeholder="课程名称" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newTeacher.phone" placeholder="教师联系电话" class="input-field" />
+          <el-input v-model="newCourse.hours" placeholder="理论学时" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newTeacher.name" placeholder="教师姓名" class="input-field" />
+          <el-input v-model="newCourse.experimentHours" placeholder="实验学时" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-button type="primary" @click="addNewTeacher" class="add-button">添加</el-button>
+          <el-input v-model="newCourse.description" placeholder="课程描述" class="input-field" />
+        </el-col>
+        <el-col :span="6">
+          <el-button type="primary" @click="addNewCourse" class="add-button">添加</el-button>
         </el-col>
       </el-row>
     </div>
 
-    <!-- 教师列表区域 -->
-    <div class="teacherTable">
+    <!-- 课程列表区域 -->
+    <div class="courseTable">
       <div class="section-header">
-        <span>教师列表</span>
+        <span>课程列表</span>
       </div>
       <div class="section-description">
-        这里展示所有已添加的教师信息，您可以进行删除操作。
+        这里展示所有已添加的课程信息，您可以进行删除操作。
       </div>
-      <el-table border :data="teachers" class="teacher-table">
-        <el-table-column label="教师姓名" prop="name"></el-table-column>
-        <el-table-column label="教师工号" prop="account"></el-table-column>
-        <el-table-column label="教师专业" prop="major"></el-table-column>
-        <el-table-column label="教师联系电话" prop="phone"></el-table-column>
+      <el-table border :data="courses" class="course-table">
+        <el-table-column label="课程名称" prop="name"></el-table-column>
+        <el-table-column label="课程ID" prop="id"></el-table-column>
+        <el-table-column label="理论学时" prop="hours"></el-table-column>
+        <el-table-column label="实验学时" prop="experimentHours"></el-table-column>
+        <el-table-column label="课程描述" prop="description"></el-table-column>
         <el-table-column label="操作" fixed="right">
           <template #default="scope">
             <el-button type="danger" @click="confirmDelete(scope.row)" class="delete-button">删除</el-button>
@@ -64,74 +68,76 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getTeachers, addTeacher, deleteTeacher } from '@/api/admin'
+import { getCourses, addCourse, deleteCourse } from '@/api/adminCourse'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
-const teachers = ref([]);
-const newTeacher = ref({
-  account: '',
-  major: '',
-  phone: '',
-  name: ''
+const courses = ref([]);
+const newCourse = ref({
+  id: '',
+  name: '',
+  hours: '',
+  experimentHours: '',
+  description: ''
 });
 
-// 页面加载时获取教师列表
+// 页面加载时获取课程列表
 onMounted(async () => {
   try {
-    const teacherList = await getTeachers();
-    teachers.value = teacherList.data;
+    const courseList = await getCourses();
+    courses.value = courseList.data;
   } catch (error) {
-    ElMessage.error('获取教师列表时出错：' + error.message);
+    ElMessage.error('获取课程列表时出错：' + error.message);
   }
 });
 
-// 添加新教师
-const addNewTeacher = async () => {
-  if (!newTeacher.value.account || !newTeacher.value.major || !newTeacher.value.phone || !newTeacher.value.name) {
+// 添加新课程
+const addNewCourse = async () => {
+  if (!newCourse.value.id || !newCourse.value.name || !newCourse.value.hours || !newCourse.value.experimentHours || !newCourse.value.description) {
     ElMessage.warning('请填写所有必填信息');
     return;
   }
 
-  const newTeacherData = {
-    account: newTeacher.value.account,
-    major: newTeacher.value.major,
-    phone: newTeacher.value.phone,
-    name: newTeacher.value.name,
+  const newCourseData = {
+    id: newCourse.value.id,
+    name: newCourse.value.name,
+    hours: newCourse.value.hours,
+    experimentHours: newCourse.value.experimentHours,
+    description: newCourse.value.description
   };
 
   try {
-    const response = await addTeacher(newTeacherData);
+    const response = await addCourse(newCourseData);
 
     if (response.code === 200) {
-      ElMessage.success('教师添加成功');
-      const updatedTeacherList = await getTeachers();
-      teachers.value = updatedTeacherList.data;
+      ElMessage.success('课程添加成功');
+      const updatedCourseList = await getCourses();
+      courses.value = updatedCourseList.data;
 
-      newTeacher.value = { account: '', major: '', phone: '', name: '' };
+      newCourse.value = { id: '', name: '', hours: '', experimentHours: '', description: '' };
     } else {
-      ElMessage.error('添加教师失败');
+      ElMessage.error('添加课程失败');
     }
   } catch (error) {
     ElMessage.error(error.message);
   }
 };
 
-// 确认删除教师
-const confirmDelete = async (teacher) => {
+// 确认删除课程
+const confirmDelete = async (course) => {
   try {
-    const confirmed = await ElMessageBox.confirm('该操作将会彻底移除该教师和其所有关联信息，谨慎操作，是否确认？', '提示', {
+    const confirmed = await ElMessageBox.confirm('该操作将会删除该课程的信息和与之关联的所有信息，谨慎操作，是否确认？', '提示', {
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning'
     });
 
     if (confirmed === 'confirm') {
-      const account = teacher.account;
-      await deleteTeacher(account);
-      ElMessage.success('教师删除成功');
+      const courseId = course.id;
+      await deleteCourse(courseId);
+      ElMessage.success('课程删除成功');
 
-      const updatedTeacherList = await getTeachers();
-      teachers.value = updatedTeacherList.data;
+      const updatedCourseList = await getCourses();
+      courses.value = updatedCourseList.data;
     }
   } catch (error) {
     // ElMessage.error(error.message);
@@ -140,7 +146,7 @@ const confirmDelete = async (teacher) => {
 </script>
 
 <style scoped>
-.teacherList {
+.courseList {
   padding: 30px;
   background: #f7f8fc;
   border-radius: 12px;
@@ -148,7 +154,7 @@ const confirmDelete = async (teacher) => {
 }
 
 .admin-tip {
-  background-color: #d0d9f3;  /* 淡蓝色背景 */
+  background-color: #d0d9f3;
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -172,7 +178,7 @@ const confirmDelete = async (teacher) => {
   font-weight: bold;
 }
 
-.addTeacher {
+.addCourse {
   background: #fff;
   padding: 25px;
   border-radius: 12px;
@@ -223,7 +229,7 @@ const confirmDelete = async (teacher) => {
   transform: translateY(-2px);
 }
 
-.teacherTable {
+.courseTable {
   margin-top: 30px;
   background: #fff;
   padding: 20px;
@@ -231,17 +237,17 @@ const confirmDelete = async (teacher) => {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.teacher-table .el-table__header {
+.course-table .el-table__header {
   background-color: #f1f3f8;
   color: #6c6f75;
   font-weight: 600;
 }
 
-.teacher-table .el-table__header th {
+.course-table .el-table__header th {
   font-size: 14px;
 }
 
-.teacher-table .el-table__body tr:hover {
+.course-table .el-table__body tr:hover {
   background-color: #f7f8fc;
 }
 
