@@ -169,10 +169,14 @@ async function submitCourseData() {
 
       });
       showAddCourseForm.value = false;
+      // //提示课程添加成功
+      ElMessage.success('课程添加成功');
     }
   } catch (error) {
     console.error('提交数据失败:', error);
+    ElMessage.error('课程添加失败，请联系管理员检查课程是否存在');
     errorMessage.value = '提交课程数据失败，请稍后再试。';
+
   }
 }
 
@@ -188,8 +192,8 @@ async function submitAndFetchData() {
   }
 
   await submitCourseData(); // 先提交数据
-  //提示课程添加成功
-  ElMessage.success('课程添加成功');
+  // //提示课程添加成功
+  // ElMessage.success('课程添加成功');
   courses.value = await getCourseData(Info.value.account)
 }
 

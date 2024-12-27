@@ -131,10 +131,10 @@ const addNewLab = async () => {
 
       newLab.value = { id: '', name: '', staffId: '', capacity: '', configuration: '', status: '' };
     } else {
-      ElMessage.error('添加实验室失败');
+      ElMessage.error('添加实验室失败,检查网络连接');
     }
   } catch (error) {
-    ElMessage.error(error.message);
+    ElMessage.error("添加失败，请检查实验室负责人是否存在!");
   }
 };
 
