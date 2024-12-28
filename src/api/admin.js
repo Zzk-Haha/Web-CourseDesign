@@ -110,3 +110,36 @@ export async function deleteTeacher(account) {
         throw error;  // 抛出错误，方便上层调用处理
     }
 }
+
+// 更新教师的密码
+export async function updateTeacherPassword(tacherAccount) {
+    const token = localStorage.getItem('token');  // 从 localStorage 获取 token
+    if (!token) {
+        console.error('Token is missing.');
+        throw new Error('后端未验证，无法登录');  // 如果没有token，抛出错误
+    }
+    const requestBody = {}
+
+    try {
+        const response = await axios.put(`http://localhost:8080/api/admin/teachers/${tacherAccount}/password`, requestBody,{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,// 加上 Authorization 头部
+            }
+        });
+
+        if (response.data.code === 200) {
+            return response.data;  // 返回已经解析好的数据
+        } else {
+            // const errorText = await response.text();
+            // console.error('Error fetching data:', errorText);
+            throw new Error('请求失败');
+        }
+    } catch (error) {
+        console.error('请求过程出错:', error);
+        throw error;  // 抛出错误，方便上层调用处理
+    }
+}
+
+
+

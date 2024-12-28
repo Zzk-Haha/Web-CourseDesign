@@ -54,7 +54,10 @@
         <el-table-column label="教师联系电话" prop="phone"></el-table-column>
         <el-table-column label="操作" fixed="right">
           <template #default="scope">
-            <el-button type="danger" @click="confirmDelete(scope.row)" class="delete-button">删除</el-button>
+            <!-- 重置密码按钮 -->
+            <el-button type="primary" @click="confirmResetPassword(scope.row)" class="reset-button">重置密码</el-button>
+            <!-- 删除按钮 -->
+            <el-button type="danger" @click="confirmDelete(scope.row)" class="delete-button">删除教师</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +67,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getTeachers, addTeacher, deleteTeacher } from '@/api/admin'
+import { getTeachers, addTeacher, deleteTeacher, updateTeacherPassword } from '@/api/admin'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 const teachers = ref([]);
@@ -137,6 +140,34 @@ const confirmDelete = async (teacher) => {
     // ElMessage.error(error.message);
   }
 };
+
+// 确认重置教师密码
+const confirmResetPassword = async (teacher) => {
+  try {
+    const confirmed = await ElMessageBox.confirm('该操作将会重置教师密码为其工号，是否确认重置密码？', '提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning'
+    });
+
+    if (confirmed === 'confirm') {
+      const account = teacher.account;
+      // console.log("工号为:"+account)
+
+      // 调用更新密码的 API
+      const response = await updateTeacherPassword(account);  // 重置密码为教师工号
+
+
+      if (response.code === 200) {
+        ElMessage.success('密码重置成功');
+      } else {
+        ElMessage.error('密码重置失败');
+      }
+    }
+  } catch (error) {
+    // ElMessage.error(error.message);
+  }
+};
 </script>
 
 <style scoped>
@@ -148,7 +179,7 @@ const confirmDelete = async (teacher) => {
 }
 
 .admin-tip {
-  background-color: #d0d9f3;  /* 淡蓝色背景 */
+  background-color: #d0d9f3;
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -242,16 +273,25 @@ const confirmDelete = async (teacher) => {
 }
 
 .teacher-table .el-table__body tr:hover {
-  background-color: #f7f8fc;
+  background-color: #f5f7fa;
+}
+
+.teacher-table .el-table__body td {
+  font-size: 14px;
+  color: #606266;
+}
+
+.delete-button,
+.reset-button {
+  margin-right: 10px;
+  font-size: 14px;
 }
 
 .delete-button {
-  background-color: #e57373;
+  background-color: #f44336;
   color: white;
-  font-weight: 600;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 14px;
+  border-radius: 6px;
+  padding: 6px 12px;
   transition: background-color 0.3s ease;
 }
 
@@ -259,7 +299,19 @@ const confirmDelete = async (teacher) => {
   background-color: #d32f2f;
 }
 
-.el-table {
+.reset-button {
+  background-color: #4CAF50; /* 绿色背景 */
+  color: white;
+  border-radius: 6px;
+  padding: 6px 12px;
   font-size: 14px;
+  font-weight: 300;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+.reset-button:hover {
+  background-color: #388E3C; /* 悬停时变为更深的绿色 */
+  transform: translateY(-2px); /* 鼠标悬停时略微提升按钮 */
+}
+
 </style>

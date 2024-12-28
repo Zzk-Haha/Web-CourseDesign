@@ -66,7 +66,7 @@ const handleLogin = async (event) => {
     }
     else if (reply.code === 400){
       event.target.password.value = ''
-
+      event.target.captcha.value = '' // 清空验证码输入框
       ElMessage.error(reply.msg)
     }
     else {
@@ -191,9 +191,7 @@ const handleAdminLogin = async (event) => {
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: 100%;
-
 }
 
 .box {
@@ -203,77 +201,80 @@ const handleAdminLogin = async (event) => {
   align-items: center;
   width: 400px;
   padding: 30px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.8); /* 深色背景 */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 4px 15px rgba(0, 0, 0, 0.3); /* 更深的阴影 */
+  backdrop-filter: blur(12px); /* 增强模糊效果，营造更强的层次感 */
 }
 
 h2 {
   font-family: 'Arial', sans-serif;
-  font-size: 28px;
-  color: #333;
+  font-size: 32px;
+  color: #ecf0f1; /* 浅灰白色字体 */
   margin-bottom: 20px;
+  font-weight: 700;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3); /* 添加文字阴影 */
 }
 
 .box input {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4); /* 半透明边框 */
   font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.1); /* 透明的输入框背景 */
+  color: #ecf0f1; /* 浅灰白色字体 */
   box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
 }
 
 .box input:focus {
-  border-color: #007bff;
+  border-color: #34495e; /* 深灰色边框 */
   outline: none;
+  background-color: rgba(255, 255, 255, 0.2); /* 聚焦时输入框背景变亮 */
 }
 
+/* 登录按钮样式 */
 .log {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   font-size: 18px;
-  background: linear-gradient(to right, #74b9ff, #adcfff);
+  color: #fff; /* 白色文字 */
+  background: linear-gradient(135deg, #1e2d24, #34495e); /* 深绿色到深灰色渐变 */
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .log:hover {
-  background: linear-gradient(to right, #62a8ea, #74b9ff);
+  background: linear-gradient(135deg, #34495e, #1e2d24); /* 悬停时渐变效果反转 */
+  transform: translateY(-2px); /* 微调位置 */
 }
 
 .admin-log {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   font-size: 18px;
-  background-color: #28a745;
+  color: #fff; /* 白色文字 */
+  background-color: #2c3e50; /* 深蓝色 */
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   margin-top: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .admin-log:hover {
-  background-color: #218838;
+  background-color: #34495e; /* 深蓝色加深 */
+  transform: translateY(-2px); /* 微调位置 */
 }
 
-/* 注册链接样式 */
-.box a {
-  color: #007bff;
-  text-decoration: none;
-  font-size: 16px;
-}
 
-.box a:hover {
-  text-decoration: underline;
-}
-
+/* 验证码输入框 */
 .captcha-container {
   display: flex;
   justify-content: space-between;
@@ -283,11 +284,22 @@ h2 {
 
 .captcha-container input {
   width: 60%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1); /* 输入框透明背景 */
+  border-radius: 8px;
+  color: #ecf0f1; /* 浅灰白色字体 */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* 半透明边框 */
+  box-sizing: border-box;
 }
 
+.captcha-container input:focus {
+  border-color: #34495e; /* 聚焦时深灰色边框 */
+}
+
+/* 响应式设计 */
 @media (max-width: 768px) {
   .box {
-    width: 100%;
+    width: 90%;
     padding: 20px;
   }
 
@@ -299,5 +311,6 @@ h2 {
     width: 45%;
   }
 }
+
 </style>
 
