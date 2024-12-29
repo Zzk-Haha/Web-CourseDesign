@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// 获取所有教师
 export async function getTeachers() {
     const token = localStorage.getItem('token');  // 从 localStorage 获取 token
     if (!token) {
@@ -12,7 +13,7 @@ export async function getTeachers() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             },
             mode : 'cors',
             credentials: 'include' // 如果需要发送 Cookie
@@ -58,7 +59,7 @@ export async function addTeacher(teacherData) {
         const response = await axios.post('http://localhost:8080/api/admin/addteacher', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -91,7 +92,7 @@ export async function deleteTeacher(account) {
         const response = await axios.post('http://localhost:8080/api/admin/delteacher', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -124,7 +125,7 @@ export async function updateTeacherPassword(tacherAccount) {
         const response = await axios.put(`http://localhost:8080/api/admin/teachers/${tacherAccount}/password`, requestBody,{
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,// 加上 Authorization 头部
+                'token': token
             }
         });
 

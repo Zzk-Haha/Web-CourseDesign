@@ -14,7 +14,7 @@ export async function getLabCapacity(studentCount)  {
         const response = await axios.post('http://localhost:8080/api/teacher/getLabByCapacity', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 

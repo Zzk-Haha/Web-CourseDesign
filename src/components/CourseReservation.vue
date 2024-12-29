@@ -178,14 +178,14 @@ const submitForm = async () => {
     const requestData = { teacherAccount: teacherAccount, courseId: courseId.value };
 
     const validationResponse = await axios.post('http://localhost:8080/api/teacher/checkCourse', requestData, {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: {token: token }
     });
 
     if (validationResponse.data.code === 200) {
       const reserveResponse = await axios.post('http://localhost:8080/api/teacher/addReservation', requestBody,{
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+          'token': token
         }
       });
       if (reserveResponse.data.code === 200) {

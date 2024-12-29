@@ -15,7 +15,7 @@ export async function reservation(account) {
         const response = await axios.post('http://localhost:8080/api/teacher/getReservation', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -52,7 +52,7 @@ export async function removeReservation(teacherAccount,week,labId,xingQi,period)
         const response = await axios.post('http://localhost:8080/api/teacher/deleteReservation', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 

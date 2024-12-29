@@ -15,7 +15,7 @@ export async function getCourseData(teacherAccount) {
         const response = await axios.post('http://localhost:8080/api/teacher/getCourses', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // 添加 Authorization 头
+                'token': token
             }
         });
 
@@ -43,7 +43,7 @@ export async function delCourse(teacherAccount,courseId) {
         const response = await axios.post('http://localhost:8080/api/teacher/delCourse', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // 添加 Authorization 头
+                'token': token
             }
         });
 

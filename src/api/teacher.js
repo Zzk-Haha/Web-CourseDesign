@@ -18,7 +18,7 @@ export async function postTeacherInfo(account,webName,email,phone) {
         const response = await axios.post('http://localhost:8080/api/teacher/updateInfo', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -54,7 +54,7 @@ export async function postUpdatePassword(password) {
         const response = await axios.patch('http://localhost:8080/api/teacher/updatePassword', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`, // 添加 Authorization 头
+                'token': token
             }
         });
 

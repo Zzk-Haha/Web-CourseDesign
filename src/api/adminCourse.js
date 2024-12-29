@@ -13,7 +13,7 @@ export async function getCourses() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             },
             mode : 'cors',
             credentials: 'include' // 如果需要发送 Cookie
@@ -56,7 +56,7 @@ export async function addCourse(courseData) {
         const response = await axios.post('http://localhost:8080/api/admin/addcourse', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -89,7 +89,7 @@ export async function deleteCourse(courseId) {
         const response = await axios.post('http://localhost:8080/api/admin/delcourse', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 

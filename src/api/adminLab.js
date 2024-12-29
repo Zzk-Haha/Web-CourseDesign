@@ -13,7 +13,7 @@ export async function getLabs() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             },
             mode : 'cors',
             credentials: 'include' // 如果需要发送 Cookie
@@ -57,7 +57,7 @@ export async function addLab(labData) {
         const response = await axios.post('http://localhost:8080/api/admin/addlab', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -90,7 +90,7 @@ export async function deleteLab(courseId) {
         const response = await axios.post('http://localhost:8080/api/admin/dellab', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 

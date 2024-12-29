@@ -13,7 +13,7 @@ export async function getLabManager() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             },
             mode : 'cors',
             credentials: 'include' // 如果需要发送 Cookie
@@ -56,7 +56,7 @@ export async function addLabManager(Data) {
         const response = await axios.post('http://localhost:8080/api/admin/addlm', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -89,7 +89,7 @@ export async function deleteLabManager(managerId) {
         const response = await axios.post('http://localhost:8080/api/admin/dellm', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 

@@ -22,19 +22,19 @@
       </div>
       <el-row gutter="20">
         <el-col :span="6">
-          <el-input v-model="newLabManager.id" placeholder="管理员工号" class="input-field" />
+          <el-input v-model="newLabManager.id" placeholder="负责人工号" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newLabManager.name" placeholder="管理员姓名" class="input-field" />
+          <el-input v-model="newLabManager.name" placeholder="负责人姓名" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newLabManager.email" placeholder="管理员邮箱" class="input-field" />
+          <el-input v-model="newLabManager.email" placeholder="负责人邮箱" class="input-field" />
         </el-col>
         <el-col :span="6">
           <el-input v-model="newLabManager.position" placeholder="职位" class="input-field" />
         </el-col>
         <el-col :span="6">
-          <el-input v-model="newLabManager.phone" placeholder="管理员联系电话" class="input-field" />
+          <el-input v-model="newLabManager.phone" placeholder="负责人联系电话" class="input-field" />
         </el-col>
         <el-col :span="6">
           <el-button type="primary" @click="addNewLabManager" class="add-button">添加</el-button>

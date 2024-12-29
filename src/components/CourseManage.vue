@@ -154,7 +154,7 @@ async function submitCourseData() {
     const response = await axios.post('http://localhost:8080/api/teacher/addCourse', requestData, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'token': token
       }
     });
     if (response.data.code === 200) {

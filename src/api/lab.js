@@ -12,7 +12,7 @@ export async function getLabInfo() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'token': token
             },
             credentials: 'include'
         });
@@ -48,7 +48,7 @@ export async function getScheduleData() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             },
             mode : 'cors',
             credentials: 'include' // 如果需要发送 Cookie
@@ -87,7 +87,7 @@ export async function getLabManager() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             },
             mode : 'cors',
             credentials: 'include' // 如果需要发送 Cookie
@@ -125,7 +125,7 @@ export async function getLabs() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             },
             mode : 'cors',
             credentials: 'include' // 如果需要发送 Cookie
@@ -167,7 +167,7 @@ export async function updateScheduleData(labId, week, token) {
         const response = await axios.post('http://localhost:8080/api/lab/schedule', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -202,7 +202,7 @@ export async function postLabInfo(id) {
         const response = await axios.post('http://localhost:8080/api/lab/info', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 
@@ -237,7 +237,7 @@ export async function postLabManager(id) {
         const response = await axios.post('http://localhost:8080/api/lab/manager', requestData, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // 加上 Authorization 头部
+                'token': token
             }
         });
 

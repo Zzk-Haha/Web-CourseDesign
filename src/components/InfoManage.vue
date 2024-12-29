@@ -164,8 +164,6 @@ function handleEditInfo() {
 // 修改个人信息
 async function submitInfoChange() {
 
-
-
   if(form.value.name === '' || form.value.email === '' || form.value.phone === ''){
     ElMessage.error("信息均不能为空")
     return
@@ -191,7 +189,8 @@ async function submitInfoChange() {
       ElMessage.error('更新失败，请稍后再试');
     }
   } catch (error) {
-    alert('请求失败，请检查网络连接或稍后再试');
+    // alert('请求失败，请检查网络连接或稍后再试');
+    ElMessage.error('请求失败，请检查邮箱是否唯一或者网络连接错误');
   }
   isEditDialogVisible.value = false;
 }
